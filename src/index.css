@@ -1,0 +1,155 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Inter:wght@400;600;700;800&family=Space+Grotesk:wght@400;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #05090e;
+}
+
+html, body, #root { height: 100%; }
+body {
+  background-color: var(--bg);
+  /* Keep paragraph/body font simple for readability */
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+}
+
+/* Techno-geometric utility for headings and keywords */
+.techno {
+  font-family: 'Orbitron', 'Space Grotesk', 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial !important;
+}
+
+/* Restore true monospace for the font-mono utility (section tags, dates, tech labels) */
+/* Use a dedicated class for techno-geometric headings instead of overriding monospace */
+.mono-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, 'Roboto Mono', 'Segoe UI Mono', 'Helvetica Neue', monospace !important;
+}
+
+/* Cyberpunk CTA and heading helpers */
+.cyber-cta {
+  color: #00f2ff;
+  border-color: rgba(0,242,255,0.15);
+}
+.heading-strong {
+  color: #00f2ff;
+}
+
+/* small helper for gradient headings used in App.jsx */
+.text-cyber-gradient {
+  background-image: linear-gradient(90deg, #ffffff 0%, #c8ffff 50%, #00f2ff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Make all bold headings use the techno font for consistency when users requested bold texts to be techno */
+.font-semibold, .font-bold {
+  font-family: 'Orbitron', 'Space Grotesk', 'Inter', ui-sans-serif, system-ui !important;
+}
+
+/* Icon cyan helper */
+.icon-cyber {
+  color: #00f2ff;
+}
+
+/* Profile orbit animation: small electron dots orbiting the avatar */
+.profile-outer { position: relative; }
+.profile-outer .outer-glow {
+  position: absolute; inset: -3px; border-radius: 9999px; pointer-events: none;
+  box-shadow: 0 0 10px rgba(0,242,255,0.08);
+  transition: box-shadow 300ms ease;
+}
+.profile-outer:hover .outer-glow { box-shadow: 0 0 20px rgba(0,242,255,0.12); }
+
+.orbit {
+  position: absolute; inset: 0; display: block; pointer-events: none; transform-origin: center;
+}@keyframes dot-orbit {
+  from { transform: translate(-50%, -50%) rotate(calc(var(--r, 0deg) + 0deg)) translateX(48px); }
+      to { transform: translate(-50%, -50%) rotate(calc(var(--r, 0deg) + 360deg)) translateX(48px); }
+}
+
+.orbit .dot {
+    position: absolute; width: 6px; height: 6px; border-radius: 9999px; background: #00f2ff; box-shadow: 0 0 8px rgba(0,242,255,0.7);
+    top: 50%; left: 50%; transform-origin: center; transform: translate(-50%, -50%) rotate(0deg) translateX(48px);
+  animation: dot-orbit 6.5s linear infinite, dot-pulse 1.6s ease-in-out infinite;
+}
+
+.orbit .dot:nth-child(2) { animation-direction: reverse, normal; }
+
+  /* set starting offsets for dots via inline --r variables already set in JSX */
+
+/* small helper to color icon wrappers */
+.icon-wrapper { display:inline-flex; align-items:center; justify-content:center; }
+
+/* Orbit dots: small glowing particles orbiting the avatar */
+.profile-outer .orbit .dot {
+    width: 6px;
+    height: 6px;
+    box-shadow: 0 0 8px rgba(0,242,255,0.9);
+    /* let the keyframes control transform and animation; do not override with !important */
+}
+.profile-outer .orbit .dot:nth-child(2) {
+    /* middle dot orbits in reverse for dynamic contrast */
+    animation-direction: reverse, normal;
+}
+
+@keyframes dot-pulse {
+    0% { transform: translate(-50%, -50%) rotate(0deg) translateX(48px) scale(0.9); opacity: 0.85; }
+    50% { transform: translate(-50%, -50%) rotate(8deg) translateX(48px) scale(1.12); opacity: 1; }
+    100% { transform: translate(-50%, -50%) rotate(0deg) translateX(48px) scale(0.9); opacity: 0.85; }
+}
+
+/* HUD ring, scanner, particles and ambient background */
+.hud-container { position: relative; }
+.rot-ring {
+  box-shadow: 0 0 28px rgba(0,242,255,0.12), inset 0 0 12px rgba(0,242,255,0.08);
+  border-radius: 9999px;
+  border: 3px solid rgba(0,242,255,0.06);
+}
+.rot-ring::before {
+  content: '';
+  position: absolute; inset: 6px; border-radius: 9999px;
+  border: 3px solid rgba(0,242,255,0.18);
+  filter: blur(4px);
+  opacity: 0.85;
+}
+.rot-ring { animation: ring-rotate 9s linear infinite; }
+@keyframes ring-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.scanner {
+  background: conic-gradient(from 0deg, rgba(0,242,255,0.14), rgba(0,242,255,0.02) 30%, rgba(0,242,255,0) 60%);
+  mix-blend-mode: screen;
+  opacity: 0.85;
+  transform: rotate(0deg);
+  filter: blur(6px);
+  animation: scanner-rotate 4.2s linear infinite;
+}
+@keyframes scanner-rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+
+/* global floating bubble particles */
+.global-bubbles { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+.global-bubbles .bubble {
+  position: absolute; left: var(--left, 50%); top: var(--top, 50%); width: var(--size, 12px); height: var(--size, 12px);
+  border-radius: 9999px; transform: translate(-50%, -50%);
+  background: radial-gradient(circle at 30% 30%, rgba(0,242,255,0.9), rgba(0,242,255,0.45));
+  opacity: 0.08; box-shadow: 0 0 12px rgba(0,242,255,0.14); filter: blur(1px);
+  animation: bubble-float var(--dur, 8s) ease-in-out infinite; animation-delay: var(--delay, 0s);
+}
+@keyframes bubble-float {
+  0% { transform: translate(-50%, -50%) translateY(0) scale(0.95); opacity: 0.06 }
+  50% { transform: translate(-50%, -50%) translateY(-18px) scale(1.12); opacity: 0.12 }
+  100% { transform: translate(-50%, -50%) translateY(0) scale(0.95); opacity: 0.06 }
+}
+
+/* ambient subtle background movement */
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background-image: radial-gradient(ellipse at center, rgba(0,242,255,0.02) 0%, rgba(0,242,255,0) 40%), radial-gradient(ellipse at 20% 80%, rgba(0,242,255,0.01) 0%, rgba(0,242,255,0) 25%);
+  mix-blend-mode: screen; opacity: 0.8; transform: translateY(0);
+  animation: ambient-move 14s ease-in-out infinite;
+}
+@keyframes ambient-move { 0% { transform: translateY(0); } 50% { transform: translateY(-12px); } 100% { transform: translateY(0); } }
+
