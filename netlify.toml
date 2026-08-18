@@ -4,8 +4,8 @@
   functions = "netlify/functions"
 
 # Single-page app redirect so client-side routing works
+# Do not force the redirect — allow existing files (assets) to be served normally
 [[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
-  force = true
