@@ -217,7 +217,7 @@ export default function App() {
     setSubmitting(true);
       try {
       // POST to Netlify Function (production) or local server (during local dev)
-      const API_ENDPOINT = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/send` : '/.netlify/functions/send';
+      const API_ENDPOINT = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/send` : '/api/send';
       const res = await fetch(API_ENDPOINT, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
