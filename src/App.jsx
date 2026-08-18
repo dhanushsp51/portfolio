@@ -216,21 +216,22 @@ export default function App() {
     e.preventDefault();
     setSubmitting(true);
       try {
-        // POST to local server (run `npm run server`) which forwards email via SMTP
-        const res = await fetch('http://localhost:3000/api/send', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...contact })
-        });
-        if (!res.ok) throw new Error('Network error');
-        const json = await res.json();
-        setSubmitting(false);
-        alert('Message sent — thank you!');
-        setContact({ name: '', email: '', subject: '', message: '' });
+      // POST to Netlify Function (production) or local server (during local dev)
+      const API_ENDPOINT = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api/send` : '/.netlify/functions/send';
+      const res = await fetch(API_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...contact })
+      });
+      if (!res.ok) throw new Error('Network error');
+      const json = await res.json();
+      setSubmitting(false);
+      alert('Message sent — thank you!');
+      setContact({ name: '', email: '', subject: '', message: '' });
       } catch (err) {
-        setSubmitting(false);
-        alert('Could not send message from browser.\n\nYou can still contact via email: dhanushsp89@gmail.com');
-        console.error(err);
+      setSubmitting(false);
+      alert('Could not send message from browser.\n\nYou can still contact via email: dhanushsp89@gmail.com');
+      console.error(err);
       }
     };
 
